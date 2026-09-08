@@ -5,7 +5,6 @@
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
     preservation.url = "github:nix-community/preservation";
-    preservation.inputs.nixpkgs.follows = "nixpkgs";
   };
   outputs = inputs@{ self, nixpkgs, ... }: {
     # NOTE: 'nixos' is the default hostname
