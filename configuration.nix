@@ -21,8 +21,8 @@
     keyMap = "us";
   };
 
-  services.displayManager.gdm.enable = true;
-  services.desktopManager.gnome.enable = true;
+#  services.displayManager.gdm.enable = true;
+#  services.desktopManager.gnome.enable = true;
   
 
   services.pipewire = {
@@ -47,10 +47,10 @@
 
   environment.systemPackages = with pkgs; [
     micro
-    curl
+    #curl
     git
-    wget
-    vscode
+    #wget
+    #vscode
   ];
 
   zramSwap = {
@@ -65,13 +65,13 @@
     "vm.watermark_boost_factor" = 0;
   };
 
-  nixpkgs.config.allowUnfree = true;
+  #nixpkgs.config.allowUnfree = true;
 
-  programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
+  #programs.mtr.enable = true;
+  #programs.gnupg.agent = {
+  #  enable = true;
+  #  enableSSHSupport = true;
+  #};
 
   system.stateVersion = "26.11";
 }
