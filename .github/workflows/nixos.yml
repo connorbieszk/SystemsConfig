@@ -1,0 +1,58 @@
+name: NixOS configurations
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+
+      - name: Build and verify every NixOS configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mapfile -t configurations < <(
+            nix eval --json .#nixosConfigurations \
+              --apply 'builtins.attrNames' | jq -r '.[]'
+          )
+
+          if (( ${#configurations[@]} == 0 )); then
+            echo "No NixOS configurations were found."
+            exit 1
+          fi
+
+          for configuration in "${configurations[@]}"; do
+            echo "==> Building ${configuration}"
+            system_path=$(nix build \
+              ".#nixosConfigurations.${configuration}.config.system.build.toplevel" \
+              --no-link --print-out-paths)
+
+            unit_path="${system_path}/etc/systemd/system"
+            mapfile -t units < <(
+              find "${unit_path}" -maxdepth 1 \
+                \( -type f -o -type l \) \
+                -printf '%f\n' \
+                | grep -E '\.(service|socket|target|mount|automount|path|timer|slice|swap)$' \
+                | sort -u
+            )
+
+            if (( ${#units[@]} == 0 )); then
+              echo "No generated systemd units found for ${configuration}."
+              exit 1
+            fi
+
+            echo "==> Verifying ${#units[@]} systemd units for ${configuration}"
+            SYSTEMD_UNIT_PATH="${unit_path}:/run/systemd/system:/etc/systemd/system" \
+              systemd-analyze verify "${units[@]}"
+          done
