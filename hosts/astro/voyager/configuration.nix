@@ -105,14 +105,21 @@
     script = ''
       # Get the ID of the user's desktop session
       USER_ID=$(id -u pblez)
+      export XDG_RUNTIME_DIR="/run/user/$USER_ID"
       export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$USER_ID/bus"
 
       # Monitor the comin service log
       ${pkgs.systemd}/bin/journalctl -u comin.service -f -n 0 | while read -r line; do
-        if echo "$line" | grep -q "Applying local configuration"; then
+        if echo "$line" | grep -q "New commits have been fetched"; then
+          ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "Comin Update" "New configuration commits fetched." -i folder-download
+        fi
+        if echo "$line" | grep -q "a generation is evaluating"; then
+          ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "Comin Update" "Evaluating the new system configuration..." -i system-search
+        fi
+        if echo "$line" | grep -q "deployer: deploying generation"; then
           ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update" "Comin is starting a new system build..." -i system-software-update
         fi
-        if echo "$line" | grep -q "Deployment successful"; then
+        if echo "$line" | grep -q "deployment ended"; then
           ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update" "System successfully rebuilt and switched!" -i checkbox-checked-symbolic
         fi
         if echo "$line" | grep -q "Deployment failed"; then
