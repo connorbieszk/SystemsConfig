@@ -10,7 +10,7 @@
   outputs = inputs@{ self, nixpkgs, disko, preservation, ... }: {
     # NOTE: 'nixos' is the default hostname
     nixosConfigurations.astrovoyager = nixpkgs.lib.nixosSystem {
-      modules = [ 
+      nixosModules = [ 
         inputs.disko.nixosModule.disko
         inputs.preservation.nixosModule.default
         ./configuration.nix 
