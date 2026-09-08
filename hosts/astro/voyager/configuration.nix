@@ -111,7 +111,7 @@
         ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.coreutils}/bin/env \
           "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR" \
           "DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS" \
-          ${pkgs.libnotify}/bin/notify-send "$@" || true
+          ${pkgs.libnotify}/bin/notify-send --app-name="Comin / NixOS Deploy" "$@" || true
       }
 
       # Monitor the comin service log
