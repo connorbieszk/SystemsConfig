@@ -1,10 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-    ];
+  imports = [
+    ./hardware-configuration.nix
+  ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -23,7 +27,7 @@
 
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
-  
+
   services.gnome.core-apps.enable = false;
   services.gnome.core-developer-tools.enable = false;
   services.gnome.games.enable = false;
@@ -31,7 +35,7 @@
     gnome-tour
     gnome-user-docs
     gnome-shell-extensions
-    ];
+  ];
 
   services.pipewire = {
     enable = true;
@@ -65,13 +69,13 @@
     libnotify
   ];
 
-programs.git = {
-  enable = true;
-  config = {
-    user.name = "Connor B.";
-    user.email = "98125183+connorbieszk@users.noreply.github.com";
+  programs.git = {
+    enable = true;
+    config = {
+      user.name = "Connor B.";
+      user.email = "98125183+connorbieszk@users.noreply.github.com";
+    };
   };
-};
 
   zramSwap = {
     enable = true;
@@ -93,36 +97,34 @@ programs.git = {
     enableSSHSupport = true;
   };
 
+  systemd.services.comin-notifier = {
+    description = "Notify user on Comin build status";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "comin.service" ];
 
-systemd.services.comin-notifier = {
-  description = "Notify user on Comin build status";
-  wantedBy = [ "multi-user.target" ];
-  after = [ "comin.service" ];
-  
-  script = ''
-    # Get the ID of the user's desktop session
-    USER_ID=$(id -u pblez)
-    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$USER_ID/bus"
-    
-    # Monitor the comin service log
-    ${pkgs.systemd}/bin/journalctl -u comin.service -f -n 0 | while read -r line; do
-      if echo "$line" | grep -q "Applying local configuration"; then
-        ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update" "Comin is starting a new system build..." -i system-software-update
-      fi
-      if echo "$line" | grep -q "Deployment successful"; then
-        ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update" "System successfully rebuilt and switched!" -i checkbox-checked-symbolic
-      fi
-      if echo "$line" | grep -q "Deployment failed"; then
-        ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update Error" "The build failed. Check logs with: journalctl -u comin" -i dialog-error
-      fi
-    done
-  '';
-  
-  serviceConfig = {
-    Restart = "always";
-    RestartSec = "5s";
+    script = ''
+      # Get the ID of the user's desktop session
+      USER_ID=$(id -u pblez)
+      export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$USER_ID/bus"
+
+      # Monitor the comin service log
+      ${pkgs.systemd}/bin/journalctl -u comin.service -f -n 0 | while read -r line; do
+        if echo "$line" | grep -q "Applying local configuration"; then
+          ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update" "Comin is starting a new system build..." -i system-software-update
+        fi
+        if echo "$line" | grep -q "Deployment successful"; then
+          ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update" "System successfully rebuilt and switched!" -i checkbox-checked-symbolic
+        fi
+        if echo "$line" | grep -q "Deployment failed"; then
+          ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update Error" "The build failed. Check logs with: journalctl -u comin" -i dialog-error
+        fi
+      done
+    '';
+
+    serviceConfig = {
+      Restart = "always";
+      RestartSec = "5s";
+    };
   };
-};
   system.stateVersion = "26.11";
 }
-

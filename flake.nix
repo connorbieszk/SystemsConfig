@@ -5,34 +5,37 @@
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
     preservation.url = "github:nix-community/preservation";
-        comin = {
+    comin = {
       url = "github:nlewo/comin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = inputs@{ self, nixpkgs, ... }: {
-    # NOTE: 'nixos' is the default hostname
-    nixosConfigurations.astrovoyager = nixpkgs.lib.nixosSystem {
-      modules = [
-        inputs.disko.nixosModules.disko
-        inputs.preservation.nixosModules.default
-        ./hosts/astro/voyager/configuration.nix 
-        ./hosts/astro/voyager/disko.nix
-        ./hosts/astro/voyager/preservation.nix
+  outputs =
+    inputs@{ self, nixpkgs, ... }:
+    {
+      # NOTE: 'nixos' is the default hostname
+      nixosConfigurations.astrovoyager = nixpkgs.lib.nixosSystem {
+        modules = [
+          inputs.disko.nixosModules.disko
+          inputs.preservation.nixosModules.default
+          ./hosts/astro/voyager/configuration.nix
+          ./hosts/astro/voyager/disko.nix
+          ./hosts/astro/voyager/preservation.nix
 
-        inputs.comin.nixosModules.comin
+          inputs.comin.nixosModules.comin
           ({
             services.comin = {
               enable = true;
-              remotes = [{
-                name = "origin";
-                url = "https://github.com/connorbieszk/SystemsConfig.git";
-                branches.main.name = "main";
-              }];
+              remotes = [
+                {
+                  name = "origin";
+                  url = "https://github.com/connorbieszk/SystemsConfig.git";
+                  branches.main.name = "main";
+                }
+              ];
             };
           })
         ];
+      };
     };
-  };
 }
-

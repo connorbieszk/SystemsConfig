@@ -45,16 +45,22 @@
 
       content = {
         type = "btrfs";
-        extraArgs = ["-f"];
+        extraArgs = [ "-f" ];
 
         subvolumes = {
           "/persistent" = {
-            mountOptions = ["subvol=persistent" "noatime"];
+            mountOptions = [
+              "subvol=persistent"
+              "noatime"
+            ];
             mountpoint = "/persistent";
           };
 
           "/nix" = {
-            mountOptions = ["subvol=nix" "noatime"];
+            mountOptions = [
+              "subvol=nix"
+              "noatime"
+            ];
             mountpoint = "/nix";
           };
         };

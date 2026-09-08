@@ -29,9 +29,9 @@
           ".local/share"
           "Projects"
         ];
-      
+
         files = [
-      
+
         ];
       };
     };
