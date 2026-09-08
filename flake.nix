@@ -7,12 +7,12 @@
     preservation.url = "github:nix-community/preservation";
     preservation.inputs.nixpkgs.follows = "nixpkgs";
   };
-  outputs = inputs@{ self, nixpkgs, disko, preservation, ... }: {
+  outputs = inputs@{ self, nixpkgs, ... }: {
     # NOTE: 'nixos' is the default hostname
     nixosConfigurations.astrovoyager = nixpkgs.lib.nixosSystem {
-      nixosModules = [ 
-        inputs.disko.nixosModule.disko
-        inputs.preservation.nixosModule.default
+      modules = [
+        disko.nixosModules.disko
+        preservation.nixosModules.default
         ./configuration.nix 
         ./disko.nix
         ./preservation.nix
