@@ -24,6 +24,9 @@
         directories = [
           ".ssh"
           ".config/mozilla"
+          ".config/Code/User/workspaceStorage"
+          ".config/Code/User/globalStorage"
+          ".local/share"
         ];
       
         files = [
