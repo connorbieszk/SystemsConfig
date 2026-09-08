@@ -11,8 +11,8 @@
     # NOTE: 'nixos' is the default hostname
     nixosConfigurations.astrovoyager = nixpkgs.lib.nixosSystem {
       modules = [ 
-        disko.nixosModule.disko
-        preservation.nixosModule.default
+        inputs.disko.nixosModule.disko
+        inputs.preservation.nixosModule.default
         ./configuration.nix 
         ./disko.nix
         ./preservation.nix
