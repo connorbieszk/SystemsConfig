@@ -6,6 +6,7 @@
       directories = [
         "/etc/nixos"
         "/var/lib/bluetooth"
+        "/etc/NetworkManager/system-connections/"
         {
           directory = "/var/lib/nixos";
           inInitrd = true;
@@ -22,7 +23,7 @@
       users.pblez = {
         directories = [
           ".ssh"
-          ".mozilla"
+          ".config/mozilla"
         ];
       
         files = [
