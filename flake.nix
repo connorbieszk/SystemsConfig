@@ -12,9 +12,9 @@
       modules = [
         inputs.disko.nixosModules.disko
         inputs.preservation.nixosModules.default
-        ./configuration.nix 
-        ./disko.nix
-        ./preservation.nix
+        ./hosts/astro/voyager/configuration.nix 
+        ./hosts/astro/voyager/disko.nix
+        ./hosts/astro/voyager/preservation.nix
         ];
     };
   };
