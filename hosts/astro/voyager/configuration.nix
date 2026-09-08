@@ -58,8 +58,11 @@
     micro
     curl
     ptyxis
+    nixd
+    nixfmt
     wget
     vscode
+    libnotify
   ];
 
 programs.git = {
@@ -90,6 +93,36 @@ programs.git = {
     enableSSHSupport = true;
   };
 
+
+systemd.services.comin-notifier = {
+  description = "Notify user on Comin build status";
+  wantedBy = [ "multi-user.target" ];
+  after = [ "comin.service" ];
+  
+  script = ''
+    # Get the ID of the user's desktop session
+    USER_ID=$(id -u pblez)
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$USER_ID/bus"
+    
+    # Monitor the comin service log
+    ${pkgs.systemd}/bin/journalctl -u comin.service -f -n 0 | while read -r line; do
+      if echo "$line" | grep -q "Applying local configuration"; then
+        ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update" "Comin is starting a new system build..." -i system-software-update
+      fi
+      if echo "$line" | grep -q "Deployment successful"; then
+        ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update" "System successfully rebuilt and switched!" -i checkbox-checked-symbolic
+      fi
+      if echo "$line" | grep -q "Deployment failed"; then
+        ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update Error" "The build failed. Check logs with: journalctl -u comin" -i dialog-error
+      fi
+    done
+  '';
+  
+  serviceConfig = {
+    Restart = "always";
+    RestartSec = "5s";
+  };
+};
   system.stateVersion = "26.11";
 }
 
