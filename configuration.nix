@@ -40,7 +40,7 @@
     packages = with pkgs; [
       tree
     ];
-    initalPassword = "12345";
+    initialPassword = "12345";
   };
 
   programs.firefox.enable = true;
