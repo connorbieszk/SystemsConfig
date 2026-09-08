@@ -27,6 +27,7 @@
           ".config/Code/User/workspaceStorage"
           ".config/Code/User/globalStorage"
           ".local/share"
+          "Projects"
         ];
       
         files = [
