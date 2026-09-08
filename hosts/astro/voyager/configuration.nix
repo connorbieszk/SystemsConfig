@@ -107,23 +107,29 @@
       USER_ID=$(id -u pblez)
       export XDG_RUNTIME_DIR="/run/user/$USER_ID"
       export DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$USER_ID/bus"
+      notify_user() {
+        ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.coreutils}/bin/env \
+          "XDG_RUNTIME_DIR=$XDG_RUNTIME_DIR" \
+          "DBUS_SESSION_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS" \
+          ${pkgs.libnotify}/bin/notify-send "$@" || true
+      }
 
       # Monitor the comin service log
       ${pkgs.systemd}/bin/journalctl -u comin.service -f -n 0 | while read -r line; do
         if echo "$line" | grep -q "New commits have been fetched"; then
-          ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "Comin Update" "New configuration commits fetched." -i folder-download
+          notify_user "Comin Update" "New configuration commits fetched." -i folder-download
         fi
         if echo "$line" | grep -q "a generation is evaluating"; then
-          ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "Comin Update" "Evaluating the new system configuration..." -i system-search
+          notify_user "Comin Update" "Evaluating the new system configuration..." -i system-search
         fi
         if echo "$line" | grep -q "deployer: deploying generation"; then
-          ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update" "Comin is starting a new system build..." -i system-software-update
+          notify_user "NixOS Update" "Comin is starting a new system build..." -i system-software-update
         fi
         if echo "$line" | grep -q "deployment ended"; then
-          ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update" "System successfully rebuilt and switched!" -i checkbox-checked-symbolic
+          notify_user "NixOS Update" "System successfully rebuilt and switched!" -i checkbox-checked-symbolic
         fi
         if echo "$line" | grep -q "Deployment failed"; then
-          ${pkgs.sudo}/bin/sudo -u pblez ${pkgs.libnotify}/bin/notify-send "NixOS Update Error" "The build failed. Check logs with: journalctl -u comin" -i dialog-error
+          notify_user "NixOS Update Error" "The build failed. Check logs with: journalctl -u comin" -i dialog-error
         fi
       done
     '';
