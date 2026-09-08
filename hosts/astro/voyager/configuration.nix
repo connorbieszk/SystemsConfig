@@ -57,11 +57,18 @@
   environment.systemPackages = with pkgs; [
     micro
     curl
-    kitty
-    git
+    ptyxis
     wget
     vscode
   ];
+
+programs.git = {
+  enable = true;
+  config = {
+    user.name = "Connor B.";
+    user.email = "98125183+connorbieszk@users.noreply.github.com";
+  };
+};
 
   zramSwap = {
     enable = true;
