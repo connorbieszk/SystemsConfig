@@ -62,6 +62,7 @@
     micro
     curl
     ptyxis
+    nautilus
     nixd
     nixfmt
     wget
