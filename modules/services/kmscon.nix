@@ -4,17 +4,11 @@
   services.kmscon = {
     enable = true;
     extraOptions = "--term xterm-256color";
-    hwRender = true; 
     
-    fonts = [
-      {
-        name = "FiraCode Nerd Font";
-        package = pkgs.nerd-fonts.fira-code;
-      }
-    ];
-    
-    extraConfig = ''
-      font-size=14
-    '';
+    config = {
+          hwaccel = true; 
+    font-name = "FiraCode Nerd Font";
+    font-size=14;
+    };
   };
 }

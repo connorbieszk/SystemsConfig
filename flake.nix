@@ -50,7 +50,7 @@
       nixosConfigurations = {        
         astrovoyager = mkHost "desktop" "astrovoyager" [
           ./hosts/astro/voyager/configuration.nix
-          ./hosts/astro/voyagerzx/disko.nix
+          ./hosts/astro/voyager/disko.nix
           ./hosts/astro/voyager/preservation.nix
         ];
       };

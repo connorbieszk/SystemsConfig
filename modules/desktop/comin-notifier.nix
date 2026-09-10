@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   systemd.services.comin-notifier = {
     description = "Notify user on Comin build status";

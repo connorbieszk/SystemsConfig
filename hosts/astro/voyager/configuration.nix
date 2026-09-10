@@ -14,7 +14,6 @@
 
   networking.networkmanager.enable = true;
 
-
   programs.firefox.enable = true;
 
   environment.systemPackages = with pkgs; [
@@ -27,6 +26,11 @@
     wget
     vscode
     libnotify
+  ];
+
+  # CORRECTED: Changed 'fira-code-nerd-font' to the modern namespace format
+  fonts.packages = with pkgs; [
+    nerd-fonts.fira-code
   ];
 
   programs.git = {
