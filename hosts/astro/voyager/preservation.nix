@@ -25,6 +25,7 @@
           ".ssh"
           ".config/mozilla"
           ".config/Code/User/workspaceStorage"
+          ".vscode/extensions"
           ".config/Code/User/globalStorage"
           ".local/share"
           "Projects"
