@@ -35,7 +35,6 @@
       nerd-fonts.fira-code
     ];
 
-    # 2. Configure fontconfig to make it your system-wide default monospace font
     fontconfig = {
       enable = true;
       defaultFonts = {
@@ -44,12 +43,11 @@
         serif = [ "DejaVu Serif" ];
       };
       
-      # 3. Force crisp rendering layouts
       hinting = {
         enable = true;
-        style = "slight"; # Keeps the shapes accurate without making them blurry
+        style = "slight";
       };
-      antialias = true; # Smooths out jagged pixel edges
+      antialias = true;
     };
   };
 

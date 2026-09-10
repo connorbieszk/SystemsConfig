@@ -3,7 +3,7 @@
 {
   services.kmscon = {
     enable = true;
-    extraOptions = "--term xterm-256color --no-mousr";
+    extraOptions = "--term xterm-256color --no-mouse";
 
     config = {
       hwaccel = true;
