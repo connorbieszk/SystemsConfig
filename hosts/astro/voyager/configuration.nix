@@ -10,8 +10,17 @@
     ./hardware-configuration.nix
   ];
 
-  boot.loader.limine.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader = {
+        efi = {
+            canTouchEfiVariables = true;
+        };
+        grub = {
+            enable = true;
+            efiSupport = true;
+            efiInstallAsRemovable = true;
+            device = "nodev";
+        };
+    };
 
   networking.hostName = "astrovoyager";
 
