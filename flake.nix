@@ -25,7 +25,7 @@
         ./modules/services/gpg.nix
         ./modules/services/kmscon.nix
         ./modules/services/locale.nix
-        ./moudles/users/pblez.nix
+        ./modules/users/pblez.nix
       ];
 
       types = {
