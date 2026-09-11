@@ -13,7 +13,8 @@
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, ... }:
+  outputs =
+    inputs@{ self, nixpkgs, ... }:
     let
       system = "x86_64-linux";
 
@@ -23,7 +24,7 @@
         ./modules/services/comin.nix
         ./modules/services/boot.nix
         ./modules/services/gpg.nix
-        ./modules/services/kmscon.nix
+        ./modules/services/fbterm.nix
         ./modules/services/locale.nix
         ./modules/users/pblez.nix
       ];
@@ -34,20 +35,20 @@
           ./modules/desktop/gnome.nix
           ./modules/desktop/pipewire.nix
         ];
-        server = [];
-        vm = [];
+        server = [ ];
+        vm = [ ];
       };
 
-      mkHost = type: hostname: extraModules: nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = { inherit inputs; };
-        modules = defaultModules 
-          ++ (types.${type} or [])
-          ++ extraModules;
-      };
+      mkHost =
+        type: hostname: extraModules:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          specialArgs = { inherit inputs; };
+          modules = defaultModules ++ (types.${type} or [ ]) ++ extraModules;
+        };
     in
     {
-      nixosConfigurations = {        
+      nixosConfigurations = {
         astrovoyager = mkHost "desktop" "astrovoyager" [
           ./hosts/astro/voyager/configuration.nix
           ./hosts/astro/voyager/disko.nix

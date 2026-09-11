@@ -42,7 +42,7 @@
         sansSerif = [ "DejaVu Sans" ];
         serif = [ "DejaVu Serif" ];
       };
-      
+
       hinting = {
         enable = true;
         style = "slight";

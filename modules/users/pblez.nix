@@ -1,7 +1,11 @@
 {
-    users.users.pblez = {
+  users.users.pblez = {
     isNormalUser = true;
-    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    extraGroups = [
+      "wheel"
+      "video"
+      "udev"
+    ]; # Enable ‘sudo’ for the user.
     initialPassword = "12345";
   };
 }

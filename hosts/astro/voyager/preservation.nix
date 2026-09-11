@@ -24,9 +24,8 @@
         directories = [
           ".ssh"
           ".config/mozilla"
-          ".config/Code/User/workspaceStorage"
+          ".config/Code/"
           ".vscode/extensions"
-          ".config/Code/User/globalStorage"
           ".local/share"
           "Projects"
         ];
