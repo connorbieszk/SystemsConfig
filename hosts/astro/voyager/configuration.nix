@@ -26,6 +26,8 @@
     wget
     vscode
     libnotify
+    sops
+    age
   ];
 
   # --- GLOBAL FONT MANAGEMENT CONFIGURATION ---
@@ -58,6 +60,8 @@
       user.email = "98125183+connorbieszk@users.noreply.github.com";
     };
   };
+
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   nixpkgs.config.allowUnfree = true;
 

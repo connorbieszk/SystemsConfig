@@ -6,6 +6,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     preservation.url = "github:nix-community/preservation";
     comin = {
       url = "github:nlewo/comin";
@@ -21,6 +26,7 @@
       defaultModules = [
         inputs.disko.nixosModules.disko
         inputs.preservation.nixosModules.default
+        inputs.sops-nix.nixosModules.sops
         ./modules/services/comin.nix
         ./modules/services/boot.nix
         ./modules/services/gpg.nix
